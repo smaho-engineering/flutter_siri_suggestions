@@ -1,11 +1,15 @@
 import 'dart:async';
+
 import 'package:flutter/services.dart';
 
 typedef Future<dynamic> MessageHandler(Map<String, dynamic> message);
 
 class FlutterSiriActivity {
   const FlutterSiriActivity(this.title, this.key,
-      {this.contentDescription, this.isEligibleForSearch = true, this.isEligibleForPrediction = true, this.suggestedInvocationPhrase})
+      {this.contentDescription,
+        this.isEligibleForSearch = true,
+        this.isEligibleForPrediction = true,
+        this.suggestedInvocationPhrase, this.userInfo,})
       : assert(title != null),
         assert(key != null),
         super();
@@ -16,6 +20,19 @@ class FlutterSiriActivity {
   final bool isEligibleForSearch;
   final bool isEligibleForPrediction;
   final String suggestedInvocationPhrase;
+  final Map<dynamic, dynamic> userInfo;
+
+  Map<String, dynamic> asMap() {
+    return {
+      'title': this.title,
+      'key': this.key,
+      'userInfo': this.userInfo,
+      'contentDescription': this.contentDescription,
+      'isEligibleForSearch': this.isEligibleForSearch,
+      'isEligibleForPrediction': this.isEligibleForPrediction,
+      'suggestedInvocationPhrase': this.suggestedInvocationPhrase ?? ""
+    };
+  }
 }
 
 class FlutterSiriSuggestions {
@@ -37,14 +54,7 @@ class FlutterSiriSuggestions {
   static const MethodChannel _channel = const MethodChannel('flutter_siri_suggestions');
 
   Future<String> buildActivity(FlutterSiriActivity activity) async {
-    return await _channel.invokeMethod('becomeCurrent', <String, Object>{
-      'title': activity.title,
-      'key': activity.key,
-      'contentDescription': activity.contentDescription,
-      'isEligibleForSearch': activity.isEligibleForSearch,
-      'isEligibleForPrediction': activity.isEligibleForPrediction,
-      'suggestedInvocationPhrase': activity.suggestedInvocationPhrase ?? ""
-    });
+    return await _channel.invokeMethod('becomeCurrent', activity.asMap());
   }
 
   void configure({MessageHandler onLaunch}) {

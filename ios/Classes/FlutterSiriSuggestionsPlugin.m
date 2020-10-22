@@ -40,7 +40,7 @@ NSString *kPluginName = @"flutter_siri_suggestions";
     
     NSString *title = [arguments objectForKey:@"title"];
     NSString *key = [arguments objectForKey:@"key"];
-    
+    NSDictionary *userInfo = [arguments objectForKey:@"userInfo"];
     NSNumber *isEligibleForSearch = [arguments objectForKey:@"isEligibleForSearch"];
     NSNumber *isEligibleForPrediction = [arguments objectForKey:@"isEligibleForPrediction"];
     NSString *contentDescription = [arguments objectForKey:@"contentDescription"];
@@ -55,13 +55,12 @@ NSString *kPluginName = @"flutter_siri_suggestions";
         if (@available(iOS 12.0, *)) {
             [activity setEligibleForPrediction:[isEligibleForPrediction boolValue]];
         }
-        
         CSSearchableItemAttributeSet *attributes = [[CSSearchableItemAttributeSet alloc] initWithItemContentType: (NSString *)kUTTypeItem];
         
         
         activity.title = title;
         attributes.contentDescription = contentDescription;
-        
+        activity.userInfo = userInfo;
         if (@available(iOS 12.0, *)) {
             
             // SIMULATOR HAS NOT RESPOND SELECTOR
