@@ -123,13 +123,11 @@ NSString *kPluginName = @"flutter_siri_suggestions";
 }
 
 - (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray *))restorationHandler {
-    if([_keySet containsObject:[userActivity activityType]]) {
-        [self onAwake:userActivity];
-        return true;
-    }
-    return false;
-    
-    
+    //if([_keySet containsObject:[userActivity activityType]]) {
+    [self onAwake:userActivity];
+    return true;
+    //}
+    //return false;
 }
 
 
