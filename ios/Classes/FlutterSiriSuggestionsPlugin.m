@@ -45,10 +45,9 @@ NSString *kPluginName = @"flutter_siri_suggestions";
     NSNumber *isEligibleForPrediction = [arguments objectForKey:@"isEligibleForPrediction"];
     NSString *contentDescription = [arguments objectForKey:@"contentDescription"];
     NSString *suggestedInvocationPhrase = [arguments objectForKey:@"suggestedInvocationPhrase"];
-    
+
     if (@available(iOS 9.0, *)) {
-        
-        NSUserActivity *activity = [[NSUserActivity alloc] initWithActivityType:[NSString stringWithFormat:@"%@-%@", kPluginName, key]];
+        NSUserActivity *activity = [[NSUserActivity alloc] initWithActivityType:[NSString stringWithFormat:@"%@.%@", key, kPluginName]];
         
         [activity setEligibleForSearch:[isEligibleForSearch boolValue]];
 
