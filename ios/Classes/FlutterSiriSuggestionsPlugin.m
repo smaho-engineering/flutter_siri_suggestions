@@ -7,7 +7,6 @@
 
 @implementation FlutterSiriSuggestionsPlugin {
     FlutterMethodChannel *_channel;
-    NSMutableSet *_keySet;
 }
 
 NSString *kPluginName = @"flutter_siri_suggestions";
@@ -22,7 +21,6 @@ NSString *kPluginName = @"flutter_siri_suggestions";
 }
 
 - (void)handleMethodCall:(FlutterMethodCall*)call result:(FlutterResult)result {
-    
     if([@"becomeCurrent" isEqualToString:call.method]) {
         return [self becomeCurrent:call result:result];
     }
@@ -33,7 +31,6 @@ NSString *kPluginName = @"flutter_siri_suggestions";
 
 
 - (void)becomeCurrent:(FlutterMethodCall*)call result:(FlutterResult)result {
-    
     NSDictionary *arguments = call.arguments;
     
     NSAssert( ([arguments objectForKey:@"key"] != nil), @"key must not nil!");
@@ -72,8 +69,6 @@ NSString *kPluginName = @"flutter_siri_suggestions";
 
         [[self rootViewController] setUserActivity:activity];
         
-        [_keySet addObject:activity.activityType];
-        
         [activity becomeCurrent];
         
         result(key);
@@ -98,7 +93,6 @@ NSString *kPluginName = @"flutter_siri_suggestions";
     self = [super init];
     if(self) {
         _channel = channel;
-        _keySet = [[NSMutableSet alloc] init];
     }
     return self;
 }
@@ -122,11 +116,11 @@ NSString *kPluginName = @"flutter_siri_suggestions";
 }
 
 - (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray *))restorationHandler {
-    //if([_keySet containsObject:[userActivity activityType]]) {
-    [self onAwake:userActivity];
-    return true;
-    //}
-    //return false;
+    if ([[userActivity activityType] hasSuffix:kPluginName]) {
+        [self onAwake:userActivity];
+        return true;
+    }
+    return false;
 }
 
 
