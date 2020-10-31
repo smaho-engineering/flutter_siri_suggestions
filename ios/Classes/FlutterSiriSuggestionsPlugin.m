@@ -42,6 +42,7 @@ NSString *kPluginName = @"flutter_siri_suggestions";
     NSNumber *isEligibleForPrediction = [arguments objectForKey:@"isEligibleForPrediction"];
     NSString *contentDescription = [arguments objectForKey:@"contentDescription"];
     NSString *suggestedInvocationPhrase = [arguments objectForKey:@"suggestedInvocationPhrase"];
+    NSString *persistentIdentifier = [arguments objectForKey:@"persistentIdentifier"];
 
     if (@available(iOS 9.0, *)) {
         NSUserActivity *activity = [[NSUserActivity alloc] initWithActivityType:[NSString stringWithFormat:@"%@.%@", key, kPluginName]];
@@ -57,15 +58,15 @@ NSString *kPluginName = @"flutter_siri_suggestions";
         activity.title = title;
         attributes.contentDescription = contentDescription;
         activity.userInfo = userInfo;
+        activity.contentAttributeSet = attributes;
+
         if (@available(iOS 12.0, *)) {
-            
+            activity.persistentIdentifier = persistentIdentifier;
             // SIMULATOR HAS NOT RESPOND SELECTOR
             #if !(TARGET_IPHONE_SIMULATOR)
             activity.suggestedInvocationPhrase = suggestedInvocationPhrase;
             #endif
-            
         }
-        activity.contentAttributeSet = attributes;
 
         [[self rootViewController] setUserActivity:activity];
         

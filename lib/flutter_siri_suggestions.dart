@@ -5,11 +5,16 @@ import 'package:flutter/services.dart';
 typedef Future<dynamic> MessageHandler(Map<String, dynamic> message);
 
 class FlutterSiriActivity {
-  const FlutterSiriActivity(this.title, this.key,
-      {this.contentDescription,
-        this.isEligibleForSearch = true,
-        this.isEligibleForPrediction = true,
-        this.suggestedInvocationPhrase, this.userInfo,})
+  const FlutterSiriActivity({
+    @required this.title,
+    @required this.key,
+    this.contentDescription,
+    this.suggestedInvocationPhrase,
+    this.userInfo,
+    this.persistentIdentifier,
+    this.isEligibleForSearch = true,
+    this.isEligibleForPrediction = true,
+  })
       : assert(title != null),
         assert(key != null),
         super();
@@ -20,6 +25,7 @@ class FlutterSiriActivity {
   final bool isEligibleForSearch;
   final bool isEligibleForPrediction;
   final String suggestedInvocationPhrase;
+  final String persistentIdentifier;
   final Map<dynamic, dynamic> userInfo;
 
   Map<String, dynamic> asMap() {
@@ -30,7 +36,8 @@ class FlutterSiriActivity {
       'contentDescription': this.contentDescription,
       'isEligibleForSearch': this.isEligibleForSearch,
       'isEligibleForPrediction': this.isEligibleForPrediction,
-      'suggestedInvocationPhrase': this.suggestedInvocationPhrase ?? ""
+      'suggestedInvocationPhrase': this.suggestedInvocationPhrase ?? "",
+      'persistentIdentifier': this.persistentIdentifier,
     };
   }
 }
@@ -41,17 +48,9 @@ class FlutterSiriSuggestions {
   /// Singleton of [FlutterSiriSuggestions].
   static final FlutterSiriSuggestions instance = FlutterSiriSuggestions._();
 
-  // FlutterSiriShortcuts(this.title, this.key,
-  //     {this.contentDescription,
-  //     this.isEligibleForSearch = true,
-  //     this.isEligibleForPrediction = true,
-  //     this.suggestedInvocationPhrase})
-  //     : assert(title != null),
-  //       super();
-
   MessageHandler _onLaunch;
 
-  static const MethodChannel _channel = const MethodChannel('flutter_siri_suggestions');
+  static const _channel = MethodChannel('flutter_siri_suggestions');
 
   Future<String> buildActivity(FlutterSiriActivity activity) async {
     return await _channel.invokeMethod('becomeCurrent', activity.asMap());
