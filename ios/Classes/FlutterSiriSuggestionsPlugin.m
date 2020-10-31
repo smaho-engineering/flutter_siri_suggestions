@@ -25,20 +25,31 @@ NSString *kPluginName = @"flutter_siri_suggestions";
         return [self becomeCurrent:call result:result];
     } else if ([@"deleteAllSavedUserActivities" isEqualToString:call.method]) {
         return [self deleteAllSavedUserActivities:call result:result];
+    } else if ([@"deleteByPersistentIdentifier" isEqualToString:call.method]) {
+        return [self deleteByPersistentIdentifier:call result:result];
     }
-    
     result(FlutterMethodNotImplemented);
-    
+}
+
+- (void)deleteByPersistentIdentifier:(FlutterMethodCall*)call result:(FlutterResult)result {
+    NSArray *persistentIdentifier = call.arguments;
+    if (@available(iOS 12.0, *)) {
+        [NSUserActivity deleteSavedUserActivitiesWithPersistentIdentifiers:persistentIdentifier completionHandler:^{
+            result(nil);
+        }];
+    } else {
+        result(nil);
+    }
 }
 
 - (void)deleteAllSavedUserActivities:(FlutterMethodCall*)call result:(FlutterResult)result {
-  if (@available(iOS 12.0, *)) {
-    [NSUserActivity deleteAllSavedUserActivitiesWithCompletionHandler:^{
-      result(nil);
-    }];
-  } else {
-    result(nil);
-  }
+    if (@available(iOS 12.0, *)) {
+        [NSUserActivity deleteAllSavedUserActivitiesWithCompletionHandler:^{
+            result(nil);
+        }];
+    } else {
+        result(nil);
+    }
 }
 
 - (void)becomeCurrent:(FlutterMethodCall*)call result:(FlutterResult)result {

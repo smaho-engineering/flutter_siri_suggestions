@@ -56,6 +56,11 @@ class FlutterSiriSuggestions {
     return _channel.invokeMethod('becomeCurrent', activity.asMap());
   }
 
+  // We could update this to accept a list
+  Future<void> deleteByPersistentIdentifier(List<String> ids) async {
+    return _channel.invokeMethod('deleteByPersistentIdentifier', ids);
+  }
+
   Future<void> deleteAllSavedUserActivities() async {
     return _channel.invokeMethod('deleteAllSavedUserActivities');
   }
