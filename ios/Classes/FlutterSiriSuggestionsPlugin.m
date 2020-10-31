@@ -23,12 +23,23 @@ NSString *kPluginName = @"flutter_siri_suggestions";
 - (void)handleMethodCall:(FlutterMethodCall*)call result:(FlutterResult)result {
     if([@"becomeCurrent" isEqualToString:call.method]) {
         return [self becomeCurrent:call result:result];
+    } else if ([@"deleteAllSavedUserActivities" isEqualToString:call.method]) {
+        return [self deleteAllSavedUserActivities:call result:result];
     }
     
     result(FlutterMethodNotImplemented);
     
 }
 
+- (void)deleteAllSavedUserActivities:(FlutterMethodCall*)call result:(FlutterResult)result {
+  if (@available(iOS 12.0, *)) {
+    [NSUserActivity deleteAllSavedUserActivitiesWithCompletionHandler:^{
+      result(nil);
+    }];
+  } else {
+    result(nil);
+  }
+}
 
 - (void)becomeCurrent:(FlutterMethodCall*)call result:(FlutterResult)result {
     NSDictionary *arguments = call.arguments;
@@ -52,9 +63,9 @@ NSString *kPluginName = @"flutter_siri_suggestions";
         if (@available(iOS 12.0, *)) {
             [activity setEligibleForPrediction:[isEligibleForPrediction boolValue]];
         }
+
         CSSearchableItemAttributeSet *attributes = [[CSSearchableItemAttributeSet alloc] initWithItemContentType: (NSString *)kUTTypeItem];
-        
-        
+
         activity.title = title;
         attributes.contentDescription = contentDescription;
         activity.userInfo = userInfo;
@@ -77,7 +88,6 @@ NSString *kPluginName = @"flutter_siri_suggestions";
 
     }
     result(nil);
-    
 }
 
 - (void)onAwake:(NSUserActivity*) userActivity {

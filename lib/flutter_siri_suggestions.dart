@@ -53,7 +53,11 @@ class FlutterSiriSuggestions {
   static const _channel = MethodChannel('flutter_siri_suggestions');
 
   Future<String> buildActivity(FlutterSiriActivity activity) async {
-    return await _channel.invokeMethod('becomeCurrent', activity.asMap());
+    return _channel.invokeMethod('becomeCurrent', activity.asMap());
+  }
+
+  Future<void> deleteAllSavedUserActivities() async {
+    return _channel.invokeMethod('deleteAllSavedUserActivities');
   }
 
   void configure({MessageHandler onLaunch}) {
