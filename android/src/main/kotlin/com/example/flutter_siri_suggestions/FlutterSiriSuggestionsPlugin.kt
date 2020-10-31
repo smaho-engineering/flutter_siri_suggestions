@@ -16,10 +16,8 @@ class FlutterSiriSuggestionsPlugin: MethodCallHandler {
   }
 
   override fun onMethodCall(call: MethodCall, result: Result) {
-    if (call.method == "becomeCurrent") {
-      print("ANDROID not support!")
-    } else {
-      result.notImplemented()
-    }
+    // Android is not supported, it is an iOS-only plugin.
+    // NOOP success.
+    result.success(null)
   }
 }
