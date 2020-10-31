@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
 typedef Future<dynamic> MessageHandler(Map<String, dynamic> message);
@@ -14,8 +15,7 @@ class FlutterSiriActivity {
     this.persistentIdentifier,
     this.isEligibleForSearch = true,
     this.isEligibleForPrediction = true,
-  })
-      : assert(title != null),
+  })  : assert(title != null),
         assert(key != null),
         super();
 
